@@ -1,0 +1,66 @@
+# 基于 .dockerignore 整理，并针对 Git 开源做了调整（见文件末尾说明）
+
+# Git / IDE
+.idea/
+.vscode/
+
+# Python
+.venv/
+__pycache__/
+**/__pycache__/
+.pytest_cache/
+.mypy_cache/
+*.pyc
+**/*.pyc
+*.pyo
+*.pyd
+.coverage
+coverage/
+htmlcov/
+
+# 前端依赖与构建缓存（保留 web/static 便于 clone 后直接运行）
+web/node_modules/
+web/.vite/
+
+# 运行时数据（含数据库、缓存、用户配置）
+log/
+data/
+backups/
+strm/
+
+# 插件模块（整个目录不开源）
+plugins/
+
+# 环境与密钥
+.env
+.env.*
+
+# 临时与备份文件
+*.bak
+*.bak.*
+*.bak*
+**/*.bak*
+*.tmp
+**/*.tmp
+*.swp
+*.swo
+*.tar
+*.zip
+
+# 系统文件
+.DS_Store
+**/.DS_Store
+
+# 本地开发笔记（不上传）
+参考资料/
+开发记录*
+开发手册*
+开发计划*
+后台改造方案*
+代码审查报告*
+全面审查问题清单与整改方案.md
+AGENTS.md
+CLAUDE.md
+LITEPAN_SYSTEM_MAP.md
+
+
