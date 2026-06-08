@@ -60,5 +60,22 @@ class BaseDriver(ABC):
     async def test_connection(self) -> OperationResult:
         raise NotImplementedError
 
+    async def rapid_upload_by_hash(
+        self,
+        parent_id: str,
+        filename: str,
+        hash_type: str,
+        hash_value: str,
+        size: int,
+        duplicate: int = 1,
+    ) -> OperationResult:
+        """按文件指纹秒传（跨盘秒传通用能力）。
+
+        目标盘若支持某种指纹的秒传，应覆写本方法并在 DRIVER_INFO.capabilities
+        声明对应能力（如 rapid_sha1）。命中返回 data={"reuse": True, "file_id": ...}，
+        未命中返回 data={"reuse": False}。默认不支持。
+        """
+        raise NotImplementedError(f"{self.__class__.__name__} 不支持指纹秒传")
+
     def __str__(self) -> str:
         return f"<{self.__class__.__name__} account_id={self.account_id}>"

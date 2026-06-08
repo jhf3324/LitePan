@@ -8,6 +8,7 @@ DRIVER_INFO = {
     "description": "115网盘官方API接入，支持文件管理、上传下载等功能",
     "author": "LitePan",
     "capabilities": ["list", "info", "download", "create_folder", "delete", "batch_delete", "rename", "move"],
+    "provide_hashes": ["sha1"],
     "driver_class": OneOneFiveOpenDriver,
     "config_class": OneOneFiveOpenConfig,
     "card_color": "#22A7F0",

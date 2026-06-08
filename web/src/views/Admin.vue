@@ -24,6 +24,9 @@
           <a class="nav-item" :class="{ active: currentPage === 'strm', disabled: isPageLocked('strm') }" @click="setCurrentPage('strm')">
             <i class="fas fa-film nav-icon"></i> 媒体管理
           </a>
+          <a class="nav-item" :class="{ active: currentPage === 'cross-transfer', disabled: isPageLocked('cross-transfer') }" @click="setCurrentPage('cross-transfer')">
+            <i class="fas fa-bolt nav-icon"></i> 跨盘秒传
+          </a>
           <a class="nav-item" :class="{ active: currentPage === 'logs', disabled: isPageLocked('logs') }" @click="setCurrentPage('logs')">
             <i class="fas fa-file-alt nav-icon"></i> 系统日志
           </a>
@@ -418,7 +421,12 @@
         <div v-if="currentPage === 'strm'" class="page-content">
           <StrmGenerator />
         </div>
-        
+
+        <!-- 跨盘秒传 -->
+        <div v-if="currentPage === 'cross-transfer'" class="page-content">
+          <CrossDriveTransfer />
+        </div>
+
         <!-- 系统日志 -->
         <div v-if="currentPage === 'logs'" class="page-content">
           <SystemLogs />
@@ -446,6 +454,7 @@ import AccountManagement from '../components/admin/AccountManagement.vue'
 import SystemSettings from '../components/admin/SystemSettings.vue'
 import CacheCenter from '../components/admin/CacheCenter.vue'
 import StrmGenerator from '../components/admin/StrmGenerator.vue'
+import CrossDriveTransfer from '../components/admin/CrossDriveTransfer.vue'
 import SystemLogs from '../components/admin/SystemLogs.vue'
 import PluginCenter from '../components/admin/PluginCenter.vue'
 import DriverIcon from '../components/common/DriverIcon.vue'
@@ -493,6 +502,7 @@ const pageTitles = {
   settings: '系统设置',
   cache: '缓存管理',
   strm: '媒体管理',
+  'cross-transfer': '跨盘秒传',
   logs: '系统日志',
   plugins: '插件中心'
 }

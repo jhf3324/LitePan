@@ -119,6 +119,7 @@ class OneOneFiveFile:
                 'parent_id': self.get_parent_id(),
                 'pick_code': self.get_pick_code(),
                 'hash_info': self.get_hash_info(),
+                'hashes': {'sha1': self.get_hash_info()} if self.get_hash_info() else {},
                 'thumbnail': self.get_thumbnail()
             }
         )
