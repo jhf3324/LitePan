@@ -62,6 +62,7 @@ const countOk = (node) => {
 
 const statusClass = (n) => {
   if (n.transferred) return 'done'
+  if (n.relay) return 'run'
   if (n.state === 'run') return 'run'
   if (n.reuse === true) return 'ok'
   if (n.reuse === false) return 'no'
@@ -69,6 +70,7 @@ const statusClass = (n) => {
 }
 const statusIcon = (n) => {
   if (n.transferred) return 'fa-check'
+  if (n.relay) return 'fa-truck-fast'
   if (n.state === 'run') return 'fa-spinner fa-spin'
   if (n.reuse === true) return 'fa-bolt'
   if (n.reuse === false) return 'fa-ban'
@@ -76,6 +78,7 @@ const statusIcon = (n) => {
 }
 const statusText = (n) => {
   if (n.transferred) return '已转存'
+  if (n.relay) return '兜底传输中'
   if (n.state === 'run') return '验证中'
   if (n.reuse === true) return '可秒传'
   if (n.reuse === false) return '不可秒传'

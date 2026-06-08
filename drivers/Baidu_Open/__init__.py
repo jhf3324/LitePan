@@ -9,6 +9,7 @@ DRIVER_INFO = {
     "description": "百度网盘官方开放API接入，当前支持OAuth认证与文件浏览",
     "author": "LitePan",
     "capabilities": ["list", "info", "download", "create_folder", "delete", "batch_delete", "rename", "move", "upload"],
+    "provide_hashes": ["md5"],
     "driver_class": BaiduOpenDriver,
     "config_class": BaiduOpenConfig,
     "card_color": "#FF4C94",

@@ -53,6 +53,8 @@ const SVG_MAP = {
 
   upload: `<svg viewBox="0 0 24 24"${NS}><path fill="#E2E8F0" d="M4 18h16v2H4z"/><path fill="#2563EB" d="M12 4 8 10h3v8h2v-8h3L12 4z"/></svg>`,
 
+  relay: `<svg viewBox="0 0 24 24"${NS}><path fill="none" stroke="#2563EB" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" d="M13 2 5 14h6l-1 8 9-12h-6z"/></svg>`,
+
   pause: `<svg viewBox="0 0 24 24"${NS}><rect x="6" y="5" width="4" height="14" rx="1" fill="#475569"/><rect x="14" y="5" width="4" height="14" rx="1" fill="#475569"/></svg>`,
 
   play: `<svg viewBox="0 0 24 24"${NS}><path fill="#475569" d="M9.5 6.5V17.5L18.5 12 9.5 6.5Z"/></svg>`,

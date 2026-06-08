@@ -67,7 +67,7 @@ const onResolve = (folder) => {
 .cross-pick-shell {
   display: flex;
   width: min(94vw, 900px);
-  height: min(80vh, 600px);
+  height: min(86vh, 570px);
   min-height: 0;
 }
 
@@ -164,9 +164,12 @@ const onResolve = (folder) => {
 }
 
 .cross-pick-folder :deep(.file-list) {
-  flex: 1;
-  min-height: 0;
+  flex: none !important;
+  height: 345px;
+  max-height: 345px;
+  min-height: 345px;
   margin-top: 2px !important;
+  overflow-y: auto;
 }
 
 .cpa-empty-folder {
@@ -176,7 +179,7 @@ const onResolve = (folder) => {
 @media (max-width: 640px) {
   .cross-pick-shell {
     flex-direction: column;
-    height: min(86vh, 640px);
+    height: min(86vh, 570px);
   }
   .cross-pick-accounts {
     width: 100%;

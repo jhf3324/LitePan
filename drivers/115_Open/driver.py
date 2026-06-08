@@ -40,6 +40,9 @@ class OneOneFiveOpenDriver(BaseDriver):
         self._session: Optional[aiohttp.ClientSession] = None
         self._refresh_lock = asyncio.Lock()
 
+    def supports_parallel_range_download(self) -> bool:
+        return False
+
     @classmethod
     def get_info(cls) -> DriverInfo:
         return DriverInfo(

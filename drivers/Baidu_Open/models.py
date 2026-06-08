@@ -6,6 +6,15 @@ from typing import Dict, Any, Optional, List
 from core.base import FileItem
 
 
+def normalize_content_md5(value: str) -> str:
+    text = str(value or "").strip().lower()
+    if len(text) != 32:
+        return ""
+    if any(ch not in "0123456789abcdef" for ch in text):
+        return ""
+    return text
+
+
 @dataclass
 class BaiduOpenFile:
     fs_id: str

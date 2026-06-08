@@ -12,6 +12,8 @@ from typing import Any, Dict, List, Optional
 
 from core.operation_wrapper import current_account_id
 
+TEMP_UPLOAD_DIR = os.path.join("data", "upload_tasks")
+
 
 @dataclass
 class UploadTask:
@@ -72,7 +74,7 @@ class UploadTask:
 
 class UploadTaskManager:
     _PROGRESS_UPDATE_INTERVAL = 0.25
-    _TEMP_UPLOAD_DIR = os.path.join("data", "upload_tasks")
+    _TEMP_UPLOAD_DIR = TEMP_UPLOAD_DIR
     _TEMP_FILE_CLEANUP_INTERVAL = 3600
     _TEMP_FILE_MAX_AGE = 24 * 3600
 
@@ -640,7 +642,15 @@ class UploadTaskManager:
     async def _get_active_temp_paths(self) -> set[str]:
         async with self._lock:
             local_paths = [task.local_path for task in self._tasks.values() if task.local_path]
-        return {self._normalize_temp_path(path) for path in local_paths}
+        paths = {self._normalize_temp_path(path) for path in local_paths}
+        try:
+            from cross_transfer.relay_task_manager import relay_task_manager
+
+            relay_paths = await relay_task_manager.get_active_local_paths()
+            paths.update(self._normalize_temp_path(path) for path in relay_paths)
+        except Exception:
+            pass
+        return paths
 
     def _normalize_temp_path(self, path: str) -> str:
         return os.path.normcase(os.path.abspath(path))

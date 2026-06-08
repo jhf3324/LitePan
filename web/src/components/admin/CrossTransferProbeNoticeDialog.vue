@@ -1,25 +1,25 @@
 <template>
   <div class="notice-dialog">
     <div class="notice-title-row">
-      <div class="notice-title">上传功能受浏览器影响，流程为：</div>
+      <div class="notice-title">试探秒传流程：</div>
       <button type="button" class="notice-close" @click="$emit('cancel')">×</button>
     </div>
 
     <div class="notice-card">
       <div class="notice-flow">
         <div class="notice-node">
-          <div class="notice-icon"><SvgIcon name="user" :size="26" /></div>
-          <span>用户</span>
+          <div class="notice-icon"><SvgIcon name="folder" :size="26" /></div>
+          <span>源文件指纹</span>
         </div>
         <div class="notice-arrow">→</div>
         <div class="notice-node wide">
           <div class="notice-icon"><SvgIcon name="monitor" :size="26" /></div>
-          <span>LitePan服务器</span>
+          <span>LitePan 试探</span>
         </div>
         <div class="notice-arrow">→</div>
         <div class="notice-node">
           <div class="notice-icon"><SvgIcon name="cloud" :size="26" /></div>
-          <span>网盘</span>
+          <span>目标盘临时目录</span>
         </div>
       </div>
     </div>
@@ -27,11 +27,15 @@
     <div class="notice-tips">
       <div class="notice-tip">
         <span class="notice-tip-bar" aria-hidden="true"></span>
-        <span>建议电脑和服务器在同一内网，否则请使用网盘官方客户端上传。</span>
+        <span>先试探可确认哪些文件能秒传；若直接传输且选了「覆盖」，误覆盖后无法撤销。</span>
       </div>
       <div class="notice-tip">
         <span class="notice-tip-bar" aria-hidden="true"></span>
-        <span>上传速度会受服务器网络带宽影响。</span>
+        <span>部分网盘（如 123）无法预检秒传，试探在临时目录进行，不影响目标目录。</span>
+      </div>
+      <div class="notice-tip">
+        <span class="notice-tip-bar" aria-hidden="true"></span>
+        <span>试探结束后自动删除临时目录，删除后可能留在回收站，请用官方客户端清空。</span>
       </div>
     </div>
 
@@ -127,6 +131,8 @@ const confirmNotice = () => {
   background: #fff;
   border: 1px solid #e5e7eb;
   color: #334155;
+  font-size: 13px;
+  text-align: center;
 }
 
 .notice-node.wide {
@@ -196,11 +202,6 @@ const confirmNotice = () => {
 }
 
 @media (max-width: 640px) {
-  .notice-dialog {
-    width: 100%;
-    max-width: 100%;
-  }
-
   .notice-flow {
     grid-template-columns: 1fr;
   }

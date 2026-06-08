@@ -19,7 +19,7 @@ from core.operation_wrapper import auto_cleanup_cache, with_file_info_cache, wit
 
 from .api import BaiduOpenAPI, BaiduOpenApiHelper
 from .config import BaiduOpenConfig
-from .models import BaiduOpenFile
+from .models import BaiduOpenFile, normalize_content_md5
 
 
 class BaiduOpenDriver(BaseDriver):
@@ -28,8 +28,12 @@ class BaiduOpenDriver(BaseDriver):
         self.access_token = config.access_token
         self.refresh_token = config.refresh_token
         self._session: Optional[aiohttp.ClientSession] = None
+        self._transfer_md5_cache: Dict[str, str] = {}
         self._oauth_server_url = get_oauth_server_url()
         self._refresh_lock = asyncio.Lock()
+
+    def supports_parallel_range_download(self) -> bool:
+        return False
 
     @classmethod
     def get_info(cls) -> DriverInfo:
@@ -1243,6 +1247,17 @@ class BaiduOpenDriver(BaseDriver):
             "User-Agent": BaiduOpenAPI.USER_AGENT,
         }
 
+    @staticmethod
+    def _extract_content_md5_from_headers(headers) -> str:
+        for key in ("Content-MD5", "content-md5", "Etag", "etag"):
+            value = headers.get(key)
+            if not value:
+                continue
+            normalized = normalize_content_md5(str(value).strip().strip('"\''))
+            if normalized:
+                return normalized
+        return ""
+
     async def _resolve_download_url(self, official_url: str) -> str:
         await self._ensure_session()
         async with self._session.head(
@@ -1254,6 +1269,38 @@ class BaiduOpenDriver(BaseDriver):
             if location:
                 return location
         return official_url
+
+    async def _probe_content_md5_from_download_url(
+        self,
+        download_url: str,
+        headers_override: Optional[Dict[str, str]] = None,
+    ) -> str:
+        await self._ensure_session()
+        headers = dict(headers_override or {})
+        headers.setdefault("User-Agent", BaiduOpenAPI.USER_AGENT)
+
+        async with self._session.head(
+            download_url,
+            headers=headers,
+            allow_redirects=True,
+        ) as response:
+            if response.status < 400:
+                result = self._extract_content_md5_from_headers(response.headers)
+                if result:
+                    return result
+
+        range_headers = dict(headers)
+        range_headers["Range"] = "bytes=0-0"
+        async with self._session.get(
+            download_url,
+            headers=range_headers,
+            allow_redirects=True,
+        ) as response:
+            if response.status in {200, 206}:
+                result = self._extract_content_md5_from_headers(response.headers)
+                if result:
+                    return result
+        return ""
 
     async def _get_file_metas(self, fs_ids: List[str], dlink: bool = False) -> List[FileItem]:
         fsids_json = json.dumps([int(fid) for fid in fs_ids])
@@ -1272,6 +1319,39 @@ class BaiduOpenDriver(BaseDriver):
             item = BaiduOpenFile.from_metas_api(item_data).to_file_item()
             result.append(item)
         return result
+
+    async def _resolve_content_md5_from_download(self, item: FileItem) -> str:
+        from core.driver_service import resolve_download
+
+        extra = item.extra or {}
+        cache_key = str(extra.get("fs_id") or item.id or "").strip()
+        if cache_key and cache_key in self._transfer_md5_cache:
+            return self._transfer_md5_cache[cache_key]
+
+        if int(item.size or 0) <= 0:
+            return ""
+
+        download = await resolve_download(self, str(item.id), "", file_info=item)
+        result = await self._probe_content_md5_from_download_url(
+            download.download_url,
+            download.headers,
+        )
+        if result and cache_key:
+            self._transfer_md5_cache[cache_key] = result
+        return result
+
+    async def resolve_transfer_hash(self, item: FileItem, method: str, *, allow_stream: bool = False) -> str:
+        if str(method or "").lower() != "md5" or not allow_stream:
+            return ""
+
+        try:
+            return await self._resolve_content_md5_from_download(item)
+        except Exception as exc:
+            self._log.warning(
+                f"百度获取 content-md5 失败 {item.name}: {exc}",
+                driver_name="baidu_open",
+            )
+            return ""
 
     def __str__(self) -> str:
         masked_token = f"{self.access_token[:12]}..." if self.access_token else "empty"

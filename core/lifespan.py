@@ -117,10 +117,12 @@ async def lifespan(_app: FastAPI):
         await log_manager.start_auto_cleanup(retention_days)
 
     from core.upload_task_manager import upload_task_manager
+    from cross_transfer.relay_task_manager import relay_task_manager
 
     await upload_task_manager.refresh_concurrency_limit()
     await upload_task_manager.cleanup_orphan_temp_files_on_startup()
     await upload_task_manager.start_temp_file_cleanup()
+    await relay_task_manager.cleanup_legacy_temp_dir_on_startup()
 
     cache_manager = init_cache_system()
     await start_cache_system()
@@ -175,6 +177,7 @@ async def lifespan(_app: FastAPI):
         from core.plugin_system import plugin_manager
         from core.strm_sync_manager import strm_sync_manager
         from core.upload_task_manager import upload_task_manager
+        from cross_transfer.relay_task_manager import relay_task_manager
 
         # 调度器和后台服务彼此独立，关闭时并行取消，避免串行吃满容器退出时间。
         await _run_shutdown_group(
@@ -185,6 +188,7 @@ async def lifespan(_app: FastAPI):
                 ("停止Emby反代监听", emby_proxy_server_manager.shutdown, "Emby反代监听已停止"),
                 ("停止插件系统", plugin_manager.shutdown, "插件系统已停止"),
                 ("停止认证系统", stop_auth_system, "认证系统已停止"),
+                ("停止跨盘中继", relay_task_manager.stop, "跨盘中继已停止"),
                 ("停止上传系统", upload_task_manager.stop, "上传系统已停止"),
                 ("停止缓存系统", stop_cache_system, "缓存系统已停止"),
             ),

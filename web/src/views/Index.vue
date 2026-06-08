@@ -87,8 +87,8 @@
           :response-time="responseTime"
           :cache-rate="cacheRate"
           :upload-task-count="displayUploadTasks.length"
-          :upload-task-active="activeUploadTasks.length > 0"
-          :upload-task-failed="displayUploadTasks.some(task => task.status === 'failed')"
+          :upload-task-active="activeUploadTasks.length > 0 || activeRelayCount > 0"
+          :upload-task-failed="displayUploadTasks.some(task => task.status === 'failed') || failedRelayTasks.length > 0"
           :upload-task-success="displayUploadTasks.some(task => task.status === 'success')"
           :upload-task-title="uploadTaskTitle"
           :upload-task-label="uploadTaskLabel"
@@ -208,14 +208,34 @@
           <div class="upload-task-sidebar">
             <button
               type="button"
-              class="upload-task-nav-item active"
+              class="upload-task-nav-item"
+              :class="{ active: taskPanelCategory === 'upload' }"
+              @click="taskPanelCategory = 'upload'"
             >
               <span class="upload-task-nav-icon"><SvgIcon name="upload" :size="16" /></span>
-              <span>上传任务</span>
+              <span class="upload-task-nav-label">上传任务</span>
+              <span
+                class="upload-task-nav-badge"
+                :class="{ 'is-empty': activeUploadTasks.length === 0 }"
+              >{{ activeUploadTasks.length || 0 }}</span>
+            </button>
+            <button
+              type="button"
+              class="upload-task-nav-item"
+              :class="{ active: taskPanelCategory === 'relay' }"
+              @click="taskPanelCategory = 'relay'"
+            >
+              <span class="upload-task-nav-icon"><SvgIcon name="relay" :size="16" /></span>
+              <span class="upload-task-nav-label">跨盘任务</span>
+              <span
+                class="upload-task-nav-badge"
+                :class="{ 'is-empty': activeRelayCount === 0 }"
+              >{{ activeRelayCount || 0 }}</span>
             </button>
           </div>
 
           <div class="upload-task-content">
+            <template v-if="taskPanelCategory === 'upload'">
             <div class="upload-task-toolbar">
               <div class="upload-task-batch-actions">
                 <button
@@ -334,6 +354,95 @@
             <div v-else class="upload-task-empty">
               <div class="upload-task-empty-text">{{ uploadTaskEmptyText }}</div>
             </div>
+            </template>
+
+            <template v-else>
+              <div class="upload-task-toolbar">
+                <div class="upload-task-batch-actions">
+                  <button
+                    type="button"
+                    class="task-toolbar-btn danger"
+                    :disabled="filteredRelayTasks.length === 0"
+                    @click="handleBatchDeleteRelayTasks"
+                  >
+                    <span class="task-btn-icon"><SvgIcon name="trash-button" :size="14" /></span>
+                    {{ relayTaskView === 'completed' ? '全部清空' : '全部删除' }}
+                  </button>
+                </div>
+                <div class="upload-task-tabs">
+                  <button
+                    type="button"
+                    class="upload-task-tab"
+                    :class="{ active: relayTaskView === 'running' }"
+                    @click="relayTaskView = 'running'"
+                  >
+                    进行中
+                    <span class="upload-task-tab-count">{{ runningRelayTasks.length }}</span>
+                  </button>
+                  <button
+                    type="button"
+                    class="upload-task-tab"
+                    :class="{ active: relayTaskView === 'completed' }"
+                    @click="relayTaskView = 'completed'"
+                  >
+                    已完成
+                    <span class="upload-task-tab-count">{{ completedRelayTasks.length }}</span>
+                  </button>
+                </div>
+              </div>
+
+              <div v-if="filteredRelayTasks.length > 0" class="upload-task-list">
+                <div
+                  v-for="task in filteredRelayTasks"
+                  :key="task.task_id"
+                  class="upload-task-item"
+                  :class="{ completed: ['success', 'failed', 'canceled'].includes(task.status) }"
+                >
+                  <div class="upload-task-item-main">
+                    <DriverIcon
+                      class="upload-task-file-icon"
+                      :logo="getRelayTaskDriverBadge(task).logo"
+                      :color="getRelayTaskDriverBadge(task).color"
+                      :name="getRelayTaskDriverBadge(task).name"
+                      :title="getRelayTaskDriverBadge(task).title"
+                      size="badge"
+                    />
+                    <div class="upload-task-file-info">
+                      <div class="upload-task-title-row">
+                        <span class="upload-task-name" :title="task.file_name">{{ task.file_name }}</span>
+                        <span class="upload-task-status" :class="`status-${task.status}`">{{ getRelayStatusText(task) }}</span>
+                      </div>
+                      <div class="upload-task-meta relay-route">
+                        {{ task.source_account_name || '源盘' }} → {{ task.target_account_name || '目标盘' }}
+                        <span v-if="task.target_display_path"> · {{ task.target_display_path }}</span>
+                      </div>
+                      <div v-if="shouldShowRelayTaskProgressBar(task)" class="upload-task-progress-bar">
+                        <div class="upload-task-progress-inner" :style="{ width: `${task.progress || 0}%` }"></div>
+                      </div>
+                      <div v-if="!['success', 'failed', 'canceled'].includes(task.status)" class="upload-task-meta">
+                        <span class="upload-task-meta-message">{{ task.message }}</span>
+                        <span v-if="formatRelaySpeed(task)" class="upload-task-speed">{{ formatRelaySpeed(task) }}</span>
+                        <span v-if="shouldShowRelayTaskMetaPercent(task)">{{ task.progress || 0 }}%</span>
+                      </div>
+                      <div v-if="task.error" class="upload-task-error">{{ task.error }}</div>
+                    </div>
+                  </div>
+                  <div class="upload-task-item-actions">
+                    <button
+                      type="button"
+                      class="task-row-btn danger"
+                      title="删除任务"
+                      @click="handleDeleteRelayTask(task)"
+                    >
+                      <i class="fas fa-trash task-btn-icon font-icon"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div v-else class="upload-task-empty">
+                <div class="upload-task-empty-text">{{ relayTaskView === 'completed' ? '暂无已完成跨盘任务' : '暂无进行中的跨盘任务' }}</div>
+              </div>
+            </template>
           </div>
         </div>
       </div>
@@ -351,9 +460,10 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useModal } from '../composables/useModal.js'
 import { useIndexFileActions } from '../composables/useIndexFileActions.js'
+import { useCrossRelayTasks } from '../composables/useCrossRelayTasks.js'
 import IndexTopNav from '../components/index/IndexTopNav.vue'
 import FileToolbar from '../components/index/FileToolbar.vue'
 import FileTable from '../components/index/FileTable.vue'
@@ -372,6 +482,7 @@ const { confirm, form, custom, closeModal } = useModal()
 import axios from 'axios'
 
 const appVersion = APP_VERSION
+const route = useRoute()
 const router = useRouter()
 
 // 响应式数据
@@ -390,7 +501,24 @@ const uploadFolderInput = ref(null)
 const uploadTasks = ref([])
 const localUploadTasks = ref([])
 const uploadTaskPanelOpen = ref(false)
+const taskPanelCategory = ref('upload')
 const uploadTaskView = ref('running')
+const {
+  relayTasks,
+  relayTaskView,
+  runningRelayTasks,
+  completedRelayTasks,
+  filteredRelayTasks,
+  activeRelayCount,
+  fetchRelayTasks,
+  openRelayMonitoring,
+  closeRelayMonitoring,
+  connectRelayStream,
+  disconnectRelayStream,
+  batchDeleteRelayTasks,
+  getRelayStatusText,
+  formatRelaySpeed,
+} = useCrossRelayTasks()
 const uploadTaskPanelLoading = ref(false)
 const uploadTaskPanelLoadingText = ref('正在准备上传任务...')
 const uploadTaskOrderMap = ref({})
@@ -667,15 +795,29 @@ const uploadTaskEmptyText = computed(() => {
     : '暂无进行中的上传任务'
 })
 
+const failedRelayTasks = computed(() => {
+  return relayTasks.value.filter(task => task.status === 'failed')
+})
+
 const uploadTaskBadgeText = computed(() => {
   const runningCount = activeUploadTasks.value.length
   if (runningCount > 0) {
     return `上传中 ${runningCount}`
   }
 
+  const relayRunningCount = activeRelayCount.value
+  if (relayRunningCount > 0) {
+    return `跨盘中 ${relayRunningCount}`
+  }
+
   const failedCount = displayUploadTasks.value.filter(task => task.status === 'failed').length
   if (failedCount > 0) {
     return `失败 ${failedCount}`
+  }
+
+  const relayFailedCount = failedRelayTasks.value.length
+  if (relayFailedCount > 0) {
+    return `跨盘失败 ${relayFailedCount}`
   }
 
   const pausedCount = displayUploadTasks.value.filter(task => task.status === 'paused').length
@@ -691,17 +833,16 @@ const uploadTaskBadgeText = computed(() => {
   return ''
 })
 
+const hasTransferPanelActivity = computed(() => (
+  activeUploadTasks.value.length > 0 ||
+  activeRelayCount.value > 0 ||
+  displayUploadTasks.value.some(task => ['failed', 'paused', 'success'].includes(task.status)) ||
+  failedRelayTasks.value.length > 0 ||
+  relayTasks.value.some(task => task.status === 'success')
+))
+
 const uploadTaskTitle = computed(() => {
-  if (activeUploadTasks.value.length > 0) {
-    return uploadTaskBadgeText.value
-  }
-  if (displayUploadTasks.value.some(task => task.status === 'failed')) {
-    return uploadTaskBadgeText.value || '传输列表'
-  }
-  if (displayUploadTasks.value.some(task => task.status === 'paused')) {
-    return uploadTaskBadgeText.value || '传输列表'
-  }
-  if (displayUploadTasks.value.some(task => task.status === 'success')) {
+  if (hasTransferPanelActivity.value) {
     return uploadTaskBadgeText.value || '传输列表'
   }
   return '传输列表'
@@ -711,8 +852,14 @@ const uploadTaskLabel = computed(() => {
   if (activeUploadTasks.value.length > 0) {
     return uploadTaskBadgeText.value
   }
+  if (activeRelayCount.value > 0) {
+    return uploadTaskBadgeText.value
+  }
   if (displayUploadTasks.value.some(task => task.status === 'failed')) {
     return uploadTaskBadgeText.value || '传输失败'
+  }
+  if (failedRelayTasks.value.length > 0) {
+    return uploadTaskBadgeText.value || '跨盘失败'
   }
   if (displayUploadTasks.value.some(task => task.status === 'paused')) {
     return uploadTaskBadgeText.value || '传输已暂停'
@@ -951,6 +1098,20 @@ const shouldShowUploadTaskProgressBar = (task) => {
 }
 
 const shouldShowUploadTaskMetaPercent = (task) => shouldShowUploadTaskProgressBar(task)
+
+const shouldShowRelayTaskProgressBar = (task) => {
+  if (['success', 'failed', 'canceled'].includes(String(task?.status || ''))) {
+    return false
+  }
+  return task?.phase === 'uploading'
+}
+
+const shouldShowRelayTaskMetaPercent = (task) => {
+  if (['success', 'failed', 'canceled'].includes(String(task?.status || ''))) {
+    return false
+  }
+  return task?.phase === 'downloading' || task?.phase === 'uploading'
+}
 
 const shouldSkipUploadNotice = () => {
   try {
@@ -2094,11 +2255,18 @@ const stopUploadTaskPolling = () => {
   }
 }
 
-const openUploadTaskPanel = async () => {
+const openUploadTaskPanel = async (preferredCategory = '') => {
   uploadTaskPanelOpen.value = true
   await fetchUploadTasks(false)
-  uploadTaskView.value = runningUploadTasks.value.length > 0 ? 'running' : 'completed'
+  await fetchRelayTasks()
+  if (preferredCategory === 'relay' || (activeRelayCount.value > 0 && runningUploadTasks.value.length === 0)) {
+    taskPanelCategory.value = 'relay'
+    relayTaskView.value = 'running'
+  } else {
+    uploadTaskView.value = runningUploadTasks.value.length > 0 ? 'running' : 'completed'
+  }
   connectUploadTaskStream()
+  connectRelayStream(true)
   if (!uploadTaskEventSource) {
     startUploadTaskPolling()
   }
@@ -2107,8 +2275,42 @@ const openUploadTaskPanel = async () => {
 const closeUploadTaskPanel = () => {
   uploadTaskPanelOpen.value = false
   disconnectUploadTaskStream()
+  disconnectRelayStream()
+  if (activeRelayCount.value > 0) {
+    openRelayMonitoring({ value: false })
+  } else {
+    closeRelayMonitoring()
+  }
   if (activeUploadTasks.value.length === 0) {
     stopUploadTaskPolling()
+  }
+}
+
+const getRelayTaskDriverBadge = (task) => {
+  return getUploadTaskDriverBadge({
+    driver_type: task?.target_driver_type,
+    account_id: task?.target_account_id,
+    account_name: task?.target_account_name || '跨盘任务',
+  })
+}
+
+const handleDeleteRelayTask = async (task) => {
+  try {
+    await batchDeleteRelayTasks([task.task_id])
+    window.appNotification?.success?.('跨盘任务已删除')
+  } catch (error) {
+    window.appNotification?.error?.(error.message || '删除跨盘任务失败')
+  }
+}
+
+const handleBatchDeleteRelayTasks = async () => {
+  const ids = filteredRelayTasks.value.map(task => task.task_id)
+  if (!ids.length) return
+  try {
+    await batchDeleteRelayTasks(ids)
+    window.appNotification?.success?.('跨盘任务已删除')
+  } catch (error) {
+    window.appNotification?.error?.(error.message || '删除跨盘任务失败')
   }
 }
 
@@ -3244,11 +3446,22 @@ const initializePage = async () => {
   if (activeUploadTasks.value.length > 0) {
     startUploadTaskPolling()
   }
+  await fetchRelayTasks()
+  if (activeRelayCount.value > 0) {
+    await openRelayMonitoring({ value: false })
+  }
 }
 
 onMounted(() => {
   restoreFileViewMode()
-  initializePage()
+  initializePage().then(() => {
+    if (route.query.taskPanel === 'relay') {
+      openUploadTaskPanel('relay')
+      const nextQuery = { ...route.query }
+      delete nextQuery.taskPanel
+      router.replace({ path: route.path, query: nextQuery })
+    }
+  })
   document.addEventListener('click', handleClickOutside)
 
   // 初始化面包屑布局
@@ -3974,30 +4187,58 @@ onUnmounted(() => {
 }
 
 .upload-task-sidebar {
-  width: 144px;
+  width: 168px;
   flex-shrink: 0;
   border-right: 1px solid #eef2f7;
-  padding: 18px 12px;
+  padding: 18px 10px;
   background: #fbfcfe;
 }
 
 .upload-task-nav-item {
   width: 100%;
-  display: flex;
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) 28px;
   align-items: center;
-  gap: 8px;
+  column-gap: 6px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
   border: none;
   background: transparent;
   color: #1f2937;
   border-radius: 10px;
-  padding: 10px 12px;
-  cursor: default;
-  font-size: 14px;
+  padding: 10px 8px;
+  cursor: pointer;
+  font-size: 13px;
   font-weight: 600;
+}
+
+.upload-task-nav-label {
+  min-width: 0;
+  white-space: nowrap;
+  text-align: left;
 }
 
 .upload-task-nav-item.active {
   background: #f3f6fb;
+}
+
+.upload-task-nav-badge {
+  justify-self: end;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: rgba(76,116,223,.12);
+  color: #2952cc;
+  font-size: 11px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-task-nav-badge.is-empty {
+  visibility: hidden;
 }
 
 .upload-task-nav-icon {
@@ -4293,6 +4534,12 @@ onUnmounted(() => {
   gap: 10px;
   font-size: 12px;
   color: #475569;
+}
+
+.upload-task-meta.relay-route {
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 4px;
 }
 
 .upload-task-meta-message {

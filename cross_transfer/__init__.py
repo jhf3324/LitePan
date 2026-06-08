@@ -7,7 +7,7 @@
 
 from .methods import TRANSFER_METHODS, get_method
 from .routes import build_routes
-from .service import scan_source, probe_stream, execute_transfer
+from .service import scan_source, probe_stream, execute_stream, execute_transfer
 
 __all__ = [
     "TRANSFER_METHODS",
@@ -15,5 +15,6 @@ __all__ = [
     "build_routes",
     "scan_source",
     "probe_stream",
+    "execute_stream",
     "execute_transfer",
 ]
