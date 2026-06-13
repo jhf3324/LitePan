@@ -1,5 +1,6 @@
 """前台只读接口：不经过 admin 鉴权，只给前台页面用。"""
 
+from __future__ import annotations
 from fastapi import APIRouter, Request
 
 from database.db import db
