@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import JSONResponse
-from typing import Dict, Any
+from typing import Any, Dict, Union
 from datetime import datetime, timezone
 UTC = timezone.utc
 import time
