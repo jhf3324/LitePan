@@ -1,8 +1,7 @@
 """驱动层基础数据模型、能力检测与配置基类。"""
 
-from __future__ import annotations
 from abc import ABC, abstractmethod
-from typing import List, Optional, Dict, Any, Protocol, runtime_checkable
+from typing import Any, Dict, List, Optional, Protocol, runtime_checkable
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum

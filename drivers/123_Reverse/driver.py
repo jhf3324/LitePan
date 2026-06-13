@@ -1,13 +1,12 @@
 """123 云盘驱动业务方法"""
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import os
 import secrets
 import tempfile
 import aiohttp
-from typing import Awaitable, Callable, Dict, Any, List, Optional
+from typing import Any, Awaitable, Callable, Dict, List, Optional
 from datetime import datetime
 from fastapi import UploadFile
 from core.base import FileItem, OperationResult, DriverInfo

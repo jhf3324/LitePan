@@ -1,7 +1,6 @@
 """通用 HTTP Range 代理。
 供浏览器、WebDAV、STRM、文件下载这些需要本地代理的场景共用。
 """
-from __future__ import annotations
 
 import asyncio
 import mimetypes

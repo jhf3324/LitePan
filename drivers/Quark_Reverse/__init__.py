@@ -1,7 +1,6 @@
 from .driver import QuarkReverseDriver
 from .config import QuarkReverseConfig
 
-from __future__ import annotations
 DRIVER_INFO = {
     "name": "quark_reverse",
     "display_name": "夸克网盘",

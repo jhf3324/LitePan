@@ -1,7 +1,6 @@
 """夸克网盘 API 端点、字段映射与辅助方法。"""
 
-from __future__ import annotations
-from typing import Dict, Any
+from typing import Any, Dict, Tuple
 
 
 class QuarkAPI:
@@ -165,7 +164,7 @@ class QuarkApiHelper:
         return current
 
     @staticmethod
-    def check_success(response: Dict[str, Any]) -> tuple[bool, str]:
+    def check_success(response: Dict[str, Any]) -> Tuple[bool, str]:
         status = response.get('status', 0)
         code = response.get('code', 0)
         message = response.get('message', '未知错误')

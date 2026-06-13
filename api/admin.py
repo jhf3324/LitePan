@@ -163,7 +163,7 @@ async def _notify_auth_manager_account_status_changed(account_id: int, enabled: 
 
 
 async def _pause_account_related_tasks(account_id: int, reason: str, message: str):
-    """账号不可用时联动暂停 cache_retention / strm 任务（reason: account_disabled | auth_failure）。"""
+    """账号不可用时联动暂停 cache_retention / strm 任务（reason: Union[account_disabled, auth_failure]）。"""
     logger = get_writer(LogModule.API)
     try:
         from core.cache_retention_manager import cache_retention_manager

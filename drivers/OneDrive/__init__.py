@@ -1,7 +1,6 @@
 from .config import OneDriveConfig
 from .driver import OneDriveDriver
 
-from __future__ import annotations
 
 DRIVER_INFO = {
     "name": "onedrive",

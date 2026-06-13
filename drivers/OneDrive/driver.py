@@ -1,10 +1,9 @@
 """OneDrive 驱动：Microsoft Graph 官方 API 接入。"""
 
-from __future__ import annotations
 import asyncio
 import os
 import tempfile
-from typing import Any, Awaitable, Callable, Dict, List, Optional
+from typing import Any, Awaitable, Callable, Dict, List, Optional, Set, Tuple
 from urllib.parse import quote
 
 import aiohttp
@@ -129,7 +128,7 @@ class OneDriveDriver(BaseDriver):
         return "replace"
 
     @staticmethod
-    def _split_copy_name(name: str) -> tuple[str, str]:
+    def _split_copy_name(name: str) -> Tuple[str, str]:
         if not name:
             return "未命名文件", ""
         if name.startswith(".") and name.count(".") == 1:
@@ -140,7 +139,7 @@ class OneDriveDriver(BaseDriver):
         return name[:dot_index], name[dot_index:]
 
     @classmethod
-    def _next_available_copy_name(cls, original_name: str, occupied_names: set[str]) -> str:
+    def _next_available_copy_name(cls, original_name: str, occupied_names: Set[str]) -> str:
         if original_name not in occupied_names:
             return original_name
 
@@ -152,7 +151,7 @@ class OneDriveDriver(BaseDriver):
                 return candidate
             index += 1
 
-    async def _collect_directory_names(self, parent_id: str) -> set[str]:
+    async def _collect_directory_names(self, parent_id: str) -> Set[str]:
         try:
             return {item.name for item in await self.list_files(parent_id) if item and item.name}
         except Exception as e:

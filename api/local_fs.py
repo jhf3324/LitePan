@@ -1,7 +1,6 @@
 """本地存储驱动的内部下载 endpoint。
 """
 
-from __future__ import annotations
 
 import asyncio
 import mimetypes
@@ -49,7 +48,7 @@ async def _resolve_driver(account_id: str) -> Optional[LocalFsDriver]:
     return None
 
 
-def _stream_with_range(path: Path, range_header: str | None):
+def _stream_with_range(path: Path, range_header: Optional[str]):
     """简单的 Range 流式响应；FileResponse 不直接支持自定义 Range，所以自己实现。"""
     file_size = path.stat().st_size
     content_type = mimetypes.guess_type(str(path))[0] or "application/octet-stream"

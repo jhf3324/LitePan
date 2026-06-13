@@ -1,11 +1,10 @@
 """基于 aiosqlite 的异步数据库访问层。"""
 
-from __future__ import annotations
 import os
 import aiosqlite
 import json
 import time
-from typing import List, Dict, Optional, Any
+from typing import Any, Dict, List, Optional
 from pathlib import Path
 
 try:

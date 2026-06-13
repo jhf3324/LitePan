@@ -1,8 +1,7 @@
 """123 云盘驱动配置：走旧站的 username+password 登录，token 由系统在后台维护。"""
 
-from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import Optional, Dict, Any
+from typing import Any, Dict, Optional
 from core.base import DriverConfig
 
 

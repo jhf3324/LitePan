@@ -1,6 +1,5 @@
 """执行整理计划"""
 
-from __future__ import annotations
 import asyncio
 from datetime import datetime
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple

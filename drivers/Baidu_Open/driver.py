@@ -1,6 +1,5 @@
 """百度网盘 Open 驱动：走官方开放 API，token 由 OAuth 中转服务自动续期。"""
 
-from __future__ import annotations
 import asyncio
 import hashlib
 import json

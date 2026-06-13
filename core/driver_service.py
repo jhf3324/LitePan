@@ -1,11 +1,10 @@
 """驱动获取与下载公共服务。"""
 
-from __future__ import annotations
 import json
 import asyncio
 from time import monotonic
 from dataclasses import dataclass
-from typing import Dict, Optional, Any
+from typing import Any, Dict, Optional
 
 from core.base import FileItem
 from core.error_handler import raise_api_error, raise_not_found

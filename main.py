@@ -1,6 +1,5 @@
 """LitePan 主入口：装配 FastAPI、路由、WebDAV 与静态资源。"""
 
-from __future__ import annotations
 import os
 import ipaddress
 from fastapi import FastAPI, Request

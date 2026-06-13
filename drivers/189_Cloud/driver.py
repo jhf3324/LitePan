@@ -1,6 +1,5 @@
 """天翼云盘驱动：第一阶段支持扫码登录、刷新会话、个人云列表。"""
 
-from __future__ import annotations
 import asyncio
 import base64
 import hashlib
@@ -10,7 +9,7 @@ import re
 import time
 import uuid
 from urllib.parse import quote, unquote
-from typing import Any, Awaitable, Callable, Dict, List, Optional
+from typing import Any, Awaitable, Callable, Dict, List, Optional, Tuple
 import xml.etree.ElementTree as ET
 
 import aiohttp
@@ -807,9 +806,9 @@ class Cloud189Driver(BaseDriver):
         return headers
 
     @staticmethod
-    def _select_upload_part_url(upload_urls: Any, expected_part_number: int) -> tuple[int, Dict[str, Any]]:
+    def _select_upload_part_url(upload_urls: Any, expected_part_number: int) -> Tuple[int, Dict[str, Any]]:
         """从天翼返回的分片上传地址中取出本次要上传的分片。"""
-        candidates: List[tuple[int, Dict[str, Any]]] = []
+        candidates: List[Tuple[int, Dict[str, Any]]] = []
 
         if isinstance(upload_urls, dict):
             items = upload_urls.items()

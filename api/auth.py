@@ -1,4 +1,3 @@
-from __future__ import annotations
 from fastapi import APIRouter, Request, Form
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel

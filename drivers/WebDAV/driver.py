@@ -1,6 +1,5 @@
 """WebDAV 驱动：PROPFIND 列目录 + MKCOL/DELETE/MOVE/PUT 写操作 + 直链/代理下载 + 流式上传。"""
 
-from __future__ import annotations
 
 import asyncio
 import base64
@@ -11,7 +10,7 @@ import tempfile
 import unicodedata
 from datetime import datetime
 from email.utils import parsedate_to_datetime
-from typing import Any, Awaitable, Callable, Dict, List, Optional, Tuple
+from typing import Any, Awaitable, Callable, Dict, List, Optional, Set, Tuple
 from urllib.parse import quote, unquote, urljoin, urlparse
 import xml.etree.ElementTree as ET
 
@@ -796,8 +795,8 @@ class WebdavDriver(BaseDriver):
 
     async def _delete_files(self, file_ids: List[str]) -> OperationResult:
         try:
-            parent_ids: set[str] = set()
-            prepared: List[tuple[str, bool]] = []
+            parent_ids: Set[str] = set()
+            prepared: List[Tuple[str, bool]] = []
             for fid in file_ids:
                 if self._is_virtual_root_id(fid):
                     return OperationResult(success=False, message="不能删除存储根目录")
@@ -878,7 +877,7 @@ class WebdavDriver(BaseDriver):
             if not file_ids:
                 return OperationResult(success=True, message="没有文件需要移动")
             target_rel = self._normalize_parent_rel(target_parent_id)
-            source_parents: set[str] = set()
+            source_parents: Set[str] = set()
             for fid in file_ids:
                 if self._is_virtual_root_id(fid):
                     return OperationResult(success=False, message="不能移动根目录")

@@ -1,6 +1,5 @@
 """缓存键生成与校验：统一 key 结构，避免散落的 f-string 拼 key。"""
 
-from __future__ import annotations
 import hashlib
 from typing import List, Optional, Union
 from .cache_types import CacheConstants, AccountId, FileId, ParentId

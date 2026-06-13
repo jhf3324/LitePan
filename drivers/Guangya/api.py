@@ -1,7 +1,6 @@
 from typing import Any, Dict
 
 
-from __future__ import annotations
 class GuangYaAPI:
     ACCOUNT_BASE_URL = "https://account.guangyapan.com"
     API_BASE_URL = "https://api.guangyapan.com"

@@ -1,6 +1,5 @@
 """缓存保持任务的调度器：按 refresh_interval 周期性刷新指定目录，保证 list_files 缓存不过期。"""
 
-from __future__ import annotations
 import asyncio
 import time
 from typing import Dict, List, Optional, Set

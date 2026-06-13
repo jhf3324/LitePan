@@ -1,6 +1,5 @@
 """账号与配置公共工具。"""
 
-from __future__ import annotations
 from typing import Any, Dict, Optional
 
 from database.db import db

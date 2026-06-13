@@ -1,4 +1,3 @@
-from __future__ import annotations
 import asyncio
 import json
 import os
@@ -6,7 +5,7 @@ import time
 import uuid
 from copy import deepcopy
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Set
 
 from core.upload_task_manager import TEMP_UPLOAD_DIR
 from cross_transfer.relay import download_source_to_file, upload_temp_to_target
@@ -88,7 +87,7 @@ class RelayTaskManager:
         self._lock = asyncio.Lock()
         self._running_count = 0
         self._condition = asyncio.Condition()
-        self._subscribers: set[asyncio.Queue[str]] = set()
+        self._subscribers: Set[asyncio.Queue[str]] = set()
 
     async def create_task(self, **kwargs) -> Dict[str, Any]:
         os.makedirs(self._TEMP_DIR, exist_ok=True)

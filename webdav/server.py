@@ -1,6 +1,5 @@
 """FastAPI 版 WebDAV 服务器：统一走驱动层 + 全局缓存 + 代理/重定向两种下载模式。"""
 
-from __future__ import annotations
 import xml.etree.ElementTree as ET
 import base64
 import time
@@ -10,7 +9,7 @@ import uuid
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
 from pathlib import PurePosixPath
-from typing import List, Tuple, Dict, Optional, Any
+from typing import Any, Dict, List, Optional, Tuple
 from urllib.parse import unquote, quote
 from html import escape as html_escape
 from fastapi import Request, Response, HTTPException

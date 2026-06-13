@@ -1,6 +1,5 @@
 """缓存保持配置的管理接口。"""
 
-from __future__ import annotations
 from fastapi import APIRouter, HTTPException, Query, Depends
 from typing import Optional
 from pydantic import BaseModel

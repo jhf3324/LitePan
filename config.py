@@ -1,6 +1,5 @@
 """LitePan 配置入口：定义默认值 + 数据库为准的 ConfigManager，兼容同步与异步访问。"""
 
-from __future__ import annotations
 import secrets
 import os
 import json

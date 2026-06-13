@@ -1,11 +1,10 @@
 """123 云盘API 端点、字段映射、签名辅助。"""
 
-from __future__ import annotations
 import math
 import random
 import time
 import zlib
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Tuple
 from urllib.parse import parse_qs, urlencode, urlparse
 
 
@@ -320,7 +319,7 @@ class Pan123ReverseApiHelper:
         return current
 
     @staticmethod
-    def _check_login_traceless(response: Dict[str, Any]) -> tuple[bool, str]:
+    def _check_login_traceless(response: Dict[str, Any]) -> Tuple[bool, str]:
         data_block = response.get("data")
         if not isinstance(data_block, dict):
             return True, ""
@@ -337,7 +336,7 @@ class Pan123ReverseApiHelper:
         return False, Pan123ReverseApiHelper.format_auth_error(str(message), traceless_code)
 
     @staticmethod
-    def check_success(response: Dict[str, Any], operation: str = "default") -> tuple[bool, str]:
+    def check_success(response: Dict[str, Any], operation: str = "default") -> Tuple[bool, str]:
         code = response.get("code")
         message = response.get("message", "未知错误")
 
@@ -371,7 +370,7 @@ class Pan123ReverseApiHelper:
         return headers
 
     @staticmethod
-    def sign_path(path: str) -> tuple[str, str]:
+    def sign_path(path: str) -> Tuple[str, str]:
         random_num = str(int(math.floor(random.random() * 1e7)))
         now = time.time() + 8 * 3600
         timestamp = str(int(now))

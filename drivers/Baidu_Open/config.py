@@ -1,6 +1,5 @@
 """百度网盘 Open 驱动配置：以 refresh_token 驱动的 OAuth，路径式 root_folder_id。"""
 
-from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Dict, Optional
 

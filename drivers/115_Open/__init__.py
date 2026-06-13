@@ -1,7 +1,6 @@
 from .driver import OneOneFiveOpenDriver
 from .config import OneOneFiveOpenConfig
 
-from __future__ import annotations
 DRIVER_INFO = {
     "name": "115_open",
     "display_name": "115网盘Open",

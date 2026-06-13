@@ -1,11 +1,10 @@
 """驱动基类：统一初始化、请求节流；缓存由装饰器处理。"""
 
-from __future__ import annotations
 import asyncio
 import contextvars
 import time
 from abc import ABC, abstractmethod
-from typing import List, Optional, Dict, Any
+from typing import Any, Dict, List, Optional
 from core.base import FileItem, OperationResult, DriverInfo
 from core.log_manager import get_writer, LogModule
 

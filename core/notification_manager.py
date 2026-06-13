@@ -1,6 +1,5 @@
 """内存通知系统：角标、列表、去重，不落库。"""
 
-from __future__ import annotations
 import uuid
 import time
 import asyncio

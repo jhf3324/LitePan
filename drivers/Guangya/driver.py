@@ -1,4 +1,3 @@
-from __future__ import annotations
 import asyncio
 import base64
 import hashlib
@@ -9,7 +8,7 @@ import secrets
 import tempfile
 import xml.etree.ElementTree as ET
 from email.utils import formatdate
-from typing import Any, Awaitable, Callable, Dict, List, Optional
+from typing import Any, Awaitable, Callable, Dict, List, Optional, Set, Tuple
 from urllib.parse import quote, urlencode, urlparse, urlunparse
 
 import aiohttp
@@ -223,7 +222,7 @@ class GuangYaDriver(BaseDriver):
         body: Dict[str, Any],
         *,
         retried: bool = False,
-        allowed_codes: Optional[set[int]] = None,
+        allowed_codes: Optional[Set[int]] = None,
     ) -> Dict[str, Any]:
         await self._ensure_session()
         if not self.access_token:
@@ -881,7 +880,7 @@ class GuangYaDriver(BaseDriver):
         if progress_callback:
             await progress_callback(uploaded_bytes, total_bytes, message)
 
-    async def _get_upload_token(self, parent_id: str, name: str, size: int) -> tuple[Dict[str, Any], int]:
+    async def _get_upload_token(self, parent_id: str, name: str, size: int) -> Tuple[Dict[str, Any], int]:
         data = await self._api_request(
             GuangYaAPI.ENDPOINTS["upload_token"],
             {

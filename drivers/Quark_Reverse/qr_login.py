@@ -1,13 +1,12 @@
 """夸克 CAS 扫码登录，进程内状态。"""
 
-from __future__ import annotations
 import asyncio
 import base64
 import io
 import time
 import uuid
 from dataclasses import dataclass
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 import aiohttp
 
@@ -75,7 +74,7 @@ class QuarkQrLoginManager:
             if dom.startswith("."):
                 score += 5
             grouped.setdefault(key, []).append((morsel.value, score))
-        parts: list[str] = []
+        parts: List[str] = []
         for key in sorted(grouped.keys()):
             best_val, _ = max(grouped[key], key=lambda x: x[1])
             parts.append(f"{key}={best_val}")

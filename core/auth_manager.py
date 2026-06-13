@@ -1,10 +1,9 @@
 """账号认证：刷新、状态持久化、后台定时检查。"""
 
-from __future__ import annotations
 import time
 import asyncio
 from enum import Enum
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 from core.log_manager import get_writer, LogModule
 from core.account_utils import AUTH_RUNTIME_FIELDS, filter_runtime_config
 from core.exceptions import AuthenticationError
@@ -645,7 +644,7 @@ class AuthScheduler:
 auth_scheduler = AuthScheduler()
 
 
-def _normalize_account_id(account_id) -> int | None:
+def _normalize_account_id(account_id) -> Optional[int]:
     try:
         return int(account_id)
     except (TypeError, ValueError):

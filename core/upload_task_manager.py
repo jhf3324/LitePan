@@ -8,7 +8,7 @@ import uuid
 from contextlib import asynccontextmanager
 from copy import deepcopy
 from dataclasses import dataclass, field
-from typing import Set, Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Set
 
 from core.operation_wrapper import current_account_id
 
@@ -85,7 +85,7 @@ class UploadTaskManager:
         self._running_count = 0
         self._concurrency_condition = asyncio.Condition()
         self._next_queue_order = 0
-        self._subscribers: set[asyncio.Queue[str]] = set()
+        self._subscribers: Set[asyncio.Queue[str]] = set()
         self._temp_cleanup_task: Optional[asyncio.Task] = None
 
     def _allocate_queue_order(self) -> int:

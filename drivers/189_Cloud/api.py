@@ -1,6 +1,5 @@
 """天翼云盘 PC 接口常量与签名工具。"""
 
-from __future__ import annotations
 import hashlib
 import hmac
 import random

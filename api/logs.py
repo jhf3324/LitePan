@@ -1,10 +1,9 @@
 """日志查询与清理 API。"""
 
-from __future__ import annotations
 from fastapi import APIRouter, Query, Depends
 from api.deps import require_admin_auth
 from pydantic import BaseModel
-from typing import List, Optional, Dict, Any
+from typing import Any, Dict, List, Optional
 from datetime import datetime
 import json
 from core.error_handler import raise_api_error

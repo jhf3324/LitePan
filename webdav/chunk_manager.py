@@ -1,6 +1,5 @@
 """WebDAV 流式传输块大小：支持智能自适应、固定值、基于速率动态调整。"""
 
-from __future__ import annotations
 from config import config_manager
 from core.log_manager import get_writer, LogModule
 

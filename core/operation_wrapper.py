@@ -1,8 +1,7 @@
 """操作包装器：统一缓存装饰器 + 写操作缓存清理 + 认证重试。"""
 
-from __future__ import annotations
 import time
-from typing import List, Callable, Any, Optional
+from typing import Any, Callable, List, Optional
 from functools import wraps
 import asyncio
 from contextvars import ContextVar

@@ -1,6 +1,5 @@
 """移动云盘 (139 Cloud) 驱动：新版个人云 API，token 认证。"""
 
-from __future__ import annotations
 import asyncio
 import base64
 import hashlib
@@ -9,7 +8,7 @@ import os
 import tempfile
 from collections import deque
 from datetime import datetime, timezone
-from typing import Any, Awaitable, Callable, Dict, List, Optional
+from typing import Any, Awaitable, Callable, Dict, List, Optional, Set
 
 import aiohttp
 from fastapi import UploadFile
@@ -459,7 +458,7 @@ class Cloud139Driver(BaseDriver):
 
         target = str(file_id)
         queue: deque[str] = deque([self._api_parent_id()])
-        visited: set[str] = set()
+        visited: Set[str] = set()
         while queue:
             if len(visited) >= self._FILE_INFO_MAX_DIRS:
                 self._log.warning(

@@ -1,6 +1,5 @@
 """全局缓存管理器：LRU + TTL + 持久化 + 内存压力感知。"""
 
-from __future__ import annotations
 import asyncio
 import time
 import psutil

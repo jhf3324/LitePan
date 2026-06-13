@@ -1,7 +1,6 @@
 from .driver import GuangYaDriver
 from .config import GuangYaConfig
 
-from __future__ import annotations
 DRIVER_INFO = {
     "name": "guangya",
     "display_name": "光鸭云盘",

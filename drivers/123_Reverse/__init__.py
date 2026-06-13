@@ -1,7 +1,6 @@
 from .driver import Pan123ReverseDriver
 from .config import Pan123ReverseConfig
 
-from __future__ import annotations
 DRIVER_INFO = {
     "name": "123_reverse",
     "display_name": "123云盘",

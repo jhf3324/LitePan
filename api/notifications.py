@@ -1,4 +1,3 @@
-from __future__ import annotations
 from fastapi import APIRouter, Depends, HTTPException
 from api.deps import require_admin_auth
 from core.notification_manager import notification_manager

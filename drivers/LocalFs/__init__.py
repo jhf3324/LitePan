@@ -1,7 +1,6 @@
 from .config import LocalFsConfig
 from .driver import LocalFsDriver
 
-from __future__ import annotations
 DRIVER_INFO = {
     "name": "local_fs",
     "display_name": "本地存储",

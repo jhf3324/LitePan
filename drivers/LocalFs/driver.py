@@ -1,7 +1,6 @@
 """本地存储驱动：把容器内的目录当作一个"网盘账号"暴露。
 """
 
-from __future__ import annotations
 
 import hashlib
 import hmac

@@ -1,7 +1,6 @@
 """115 驱动数据模型：把 115 响应 dict 转成统一 FileItem。"""
 
-from __future__ import annotations
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 from datetime import datetime, timezone
 from core.base import FileItem
 from core.log_manager import get_writer, LogModule

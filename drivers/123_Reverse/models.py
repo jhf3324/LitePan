@@ -1,8 +1,7 @@
 """123 云盘（逆向）驱动数据模型。"""
 
-from __future__ import annotations
 from dataclasses import dataclass
-from typing import Optional, Dict, Any
+from typing import Any, Dict, List, Optional
 from datetime import datetime, timezone
 from core.base import FileItem
 
@@ -80,7 +79,7 @@ class Pan123ReverseFile:
 class Pan123ReverseFileList:
     next: str
     total: int
-    info_list: list[Pan123ReverseFile]
+    info_list: List[Pan123ReverseFile]
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'Pan123ReverseFileList':

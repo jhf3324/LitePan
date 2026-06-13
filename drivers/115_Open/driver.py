@@ -1,6 +1,5 @@
 """115 Open 驱动业务方法"""
 
-from __future__ import annotations
 import asyncio
 import base64
 import hashlib
@@ -12,7 +11,7 @@ import time
 import xml.etree.ElementTree as ET
 from copy import deepcopy
 from email.utils import formatdate
-from typing import Any, Awaitable, Callable, Dict, List, Optional
+from typing import Any, Awaitable, Callable, Dict, List, Optional, Tuple
 from urllib.parse import quote
 
 import aiohttp
@@ -1096,7 +1095,7 @@ class OneOneFiveOpenDriver(BaseDriver):
         parent_id: str,
         file_name: str,
         conflict_policy: str,
-    ) -> tuple[str, Optional[OperationResult]]:
+    ) -> Tuple[str, Optional[OperationResult]]:
         existing_items = await self.list_files(parent_id)
         name_map = {item.name.lower(): item for item in existing_items}
         existing_item = name_map.get(file_name.lower())
@@ -2059,7 +2058,7 @@ class OneOneFiveOpenDriver(BaseDriver):
             resource = f"{resource}?{'&'.join(items)}"
         return resource
 
-    def _extract_oss_callback_headers(self, init_data: Dict[str, Any], file_sha1: str = "") -> tuple[str, str]:
+    def _extract_oss_callback_headers(self, init_data: Dict[str, Any], file_sha1: str = "") -> Tuple[str, str]:
         callback_data = init_data.get("callback")
         if isinstance(callback_data, dict):
             if "callback" in callback_data or "callback_var" in callback_data:

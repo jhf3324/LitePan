@@ -1,7 +1,6 @@
 from .driver import Cloud189Driver
 from .config import Cloud189Config
 
-from __future__ import annotations
 DRIVER_INFO = {
     "name": "189_cloud",
     "display_name": "天翼云盘",

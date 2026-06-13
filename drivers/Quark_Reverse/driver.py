@@ -1,6 +1,5 @@
 """夸克网盘驱动核心业务方法"""
 
-from __future__ import annotations
 import asyncio
 import base64
 import hashlib
@@ -13,7 +12,7 @@ import tempfile
 import time
 from http.cookies import SimpleCookie
 from email.utils import formatdate
-from typing import List, Optional, Dict, Any, Awaitable, Callable
+from typing import Any, Awaitable, Callable, Dict, List, Optional, Set, Tuple
 from datetime import datetime, timezone
 from fastapi import UploadFile
 from core.base import FileItem, OperationResult, DriverInfo
@@ -1050,7 +1049,7 @@ class QuarkReverseDriver(BaseDriver):
             data=data,
         )
 
-    def _calculate_file_hashes(self, local_path: str) -> tuple[str, str]:
+    def _calculate_file_hashes(self, local_path: str) -> Tuple[str, str]:
         md5 = hashlib.md5()
         sha1 = hashlib.sha1()
         with open(local_path, "rb") as fp:
@@ -1230,7 +1229,7 @@ class QuarkReverseDriver(BaseDriver):
 
         return {"action": "upload", "file_name": file_name}
 
-    def _generate_keep_both_name(self, original_name: str, existing_names: set[str]) -> str:
+    def _generate_keep_both_name(self, original_name: str, existing_names: Set[str]) -> str:
         if original_name not in existing_names:
             return original_name
 

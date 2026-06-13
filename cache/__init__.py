@@ -1,6 +1,5 @@
 """缓存子系统入口：全局缓存管理器 + 清理器 + 命中率追踪器。"""
 
-from __future__ import annotations
 from typing import Optional
 
 from .cache_manager import GlobalCacheManager

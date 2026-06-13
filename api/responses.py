@@ -1,6 +1,5 @@
 """API 统一响应辅助函数。"""
 
-from __future__ import annotations
 from core.response import APIResponse
 
 

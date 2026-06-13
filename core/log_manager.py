@@ -1,11 +1,10 @@
 """统一日志"""
 
-from __future__ import annotations
 import asyncio
 import json
 import sys
 from datetime import datetime, timedelta
-from typing import Callable, List, Dict, Any, Optional
+from typing import Any, Callable, Dict, List, Optional
 from pathlib import Path
 from enum import Enum, IntEnum
 from dataclasses import dataclass

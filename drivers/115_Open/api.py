@@ -1,7 +1,6 @@
 """115 开放 API 端点、字段映射、响应路径集中表。"""
 
-from __future__ import annotations
-from typing import Dict, Any
+from typing import Any, Dict, Tuple
 
 
 class OneOneFiveAPI:
@@ -152,7 +151,7 @@ class OneOneFiveApiHelper:
         return current
 
     @staticmethod
-    def check_success(response: Dict[str, Any]) -> tuple[bool, str]:
+    def check_success(response: Dict[str, Any]) -> Tuple[bool, str]:
         """115 成功态：state=True/1/'true'；其余按错误码翻译成中文。"""
         state = response.get("state", True)
 

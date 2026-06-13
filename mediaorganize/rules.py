@@ -1,7 +1,6 @@
-from __future__ import annotations
 import re
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 
 MEDIA_TAG_FIELDS = ["screen_size", "frame_rate", "video_codec", "audio_codec", "audio_channels"]
@@ -1448,7 +1447,7 @@ def extract_episode_token(name: str, parsed: Optional[dict] = None) -> Optional[
     return None
 
 
-def _meta_file_extension(name: str, meta_exts: set[str]) -> Optional[str]:
+def _meta_file_extension(name: str, meta_exts: Set[str]) -> Optional[str]:
     if not name or "." not in name:
         return None
     suffix = name.rsplit(".", 1)[-1].lower()
@@ -1467,7 +1466,7 @@ def _meta_file_extension(name: str, meta_exts: set[str]) -> Optional[str]:
 def match_meta_file_prefix(
     name: str,
     match_bases: List[str],
-    meta_exts: set[str],
+    meta_exts: Set[str],
     *,
     episode_token: Optional[str] = None,
 ) -> Optional[str]:

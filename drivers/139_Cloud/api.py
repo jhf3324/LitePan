@@ -1,6 +1,5 @@
 """移动云盘 API 端点、签名计算与请求辅助。"""
 
-from __future__ import annotations
 import hashlib
 import secrets
 import string
