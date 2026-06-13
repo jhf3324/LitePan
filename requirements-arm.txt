@@ -8,4 +8,3 @@ qrcode
 guessit
 tmdbsimple
 PySocks
-pycryptodome
