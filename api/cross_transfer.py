@@ -1,5 +1,6 @@
 """跨盘秒传管理接口。"""
 
+from __future__ import annotations
 import asyncio
 import json
 from typing import List, Optional
