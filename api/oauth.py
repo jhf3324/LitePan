@@ -1,5 +1,6 @@
 """OAuth 代理：把前端请求转发到外部 OAuth 服务。"""
 
+from __future__ import annotations
 import asyncio
 import aiohttp
 from fastapi import APIRouter, HTTPException, Request
