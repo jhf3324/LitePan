@@ -1,5 +1,6 @@
 """缓存命中率追踪：给前端仪表盘用，会话级 + 全局两套计数。"""
 
+from __future__ import annotations
 from datetime import datetime, timedelta
 from typing import Dict, Optional
 from dataclasses import dataclass
