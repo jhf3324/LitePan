@@ -1,5 +1,6 @@
 from typing import Dict, List
 
+from __future__ import annotations
 from core.registry import driver_registry
 
 from .methods import TRANSFER_METHODS

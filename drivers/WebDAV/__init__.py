@@ -1,6 +1,7 @@
 from .config import WebdavConfig
 from .driver import WebdavDriver
 
+from __future__ import annotations
 DRIVER_INFO = {
     "name": "webdav",
     "display_name": "WebDAV",

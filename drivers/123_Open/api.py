@@ -1,5 +1,6 @@
 """123 云盘开放 API 端点与响应辅助方法。"""
 
+from __future__ import annotations
 from typing import Any, Dict, Tuple
 
 

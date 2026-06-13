@@ -1,5 +1,6 @@
 """跨盘秒传：基于文件指纹的跨网盘秒传能力。
 
+from __future__ import annotations
 - methods：可插拔的秒传方法（sha1 / md5 / ...）
 - routes：由各驱动声明的能力推导出可行线路（卡片）
 - service：扫描源目录指纹、试探可秒传、执行秒传

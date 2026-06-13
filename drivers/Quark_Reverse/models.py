@@ -1,5 +1,6 @@
 """夸克网盘数据模型：把夸克响应转换成统一 FileItem。"""
 
+from __future__ import annotations
 from datetime import datetime, timezone
 from typing import Optional, Dict, Any
 from core.base import FileItem

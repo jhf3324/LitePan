@@ -1,6 +1,7 @@
 """百度网盘 Open API 端点、错误码与辅助工具。
 - 直链下载必须带 User-Agent: pan.baidu.com
 """
+from __future__ import annotations
 
 from typing import Dict, Any, Tuple
 

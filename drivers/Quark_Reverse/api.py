@@ -1,5 +1,6 @@
 """夸克网盘 API 端点、字段映射与辅助方法。"""
 
+from __future__ import annotations
 from typing import Dict, Any
 
 

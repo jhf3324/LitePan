@@ -1,6 +1,7 @@
 from .driver import BaiduOpenDriver
 from .config import BaiduOpenConfig
 
+from __future__ import annotations
 
 DRIVER_INFO = {
     "name": "baidu_open",

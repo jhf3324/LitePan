@@ -1,5 +1,6 @@
 """115 开放 API 端点、字段映射、响应路径集中表。"""
 
+from __future__ import annotations
 from typing import Dict, Any
 
 

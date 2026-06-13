@@ -1,5 +1,6 @@
 """秒传方法注册表。
 
+from __future__ import annotations
 每种方法对应一种文件指纹（hash）。源盘需能提供该指纹，目标盘需支持该指纹秒传。
 新增其它指纹（如 md5）时，只需在此登记一条，并让对应驱动在 DRIVER_INFO 声明
 provide_hashes / rapid_upload 即可，无需改动公共层与前端。

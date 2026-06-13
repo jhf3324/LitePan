@@ -1,5 +1,6 @@
 """夸克 CAS 扫码登录，进程内状态。"""
 
+from __future__ import annotations
 import asyncio
 import base64
 import io

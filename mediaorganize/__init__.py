@@ -1,3 +1,4 @@
+from __future__ import annotations
 from mediaorganize import rules
 from mediaorganize.planner import Plan, PlanAction, Planner, search_tmdb_async, validate_tmdb_connection, build_proxy_url
 from mediaorganize.executor import Executor

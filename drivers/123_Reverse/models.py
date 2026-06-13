@@ -1,5 +1,6 @@
 """123 云盘（逆向）驱动数据模型。"""
 
+from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional, Dict, Any
 from datetime import datetime, timezone

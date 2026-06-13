@@ -1,5 +1,6 @@
 """基于 itsdangerous 的 session cookie 管理。"""
 
+from __future__ import annotations
 import json
 from datetime import datetime, timedelta
 from core.security import URLSafeTimedSerializer, BadSignature, SignatureExpired

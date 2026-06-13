@@ -1,5 +1,6 @@
 """FastAPI 版 WebDAV 服务器：统一走驱动层 + 全局缓存 + 代理/重定向两种下载模式。"""
 
+from __future__ import annotations
 import xml.etree.ElementTree as ET
 import base64
 import time

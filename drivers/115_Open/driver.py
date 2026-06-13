@@ -1,5 +1,6 @@
 """115 Open 驱动业务方法"""
 
+from __future__ import annotations
 import asyncio
 import base64
 import hashlib

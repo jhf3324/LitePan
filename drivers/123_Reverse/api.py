@@ -1,5 +1,6 @@
 """123 云盘API 端点、字段映射、签名辅助。"""
 
+from __future__ import annotations
 import math
 import random
 import time

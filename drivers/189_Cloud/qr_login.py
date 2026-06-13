@@ -1,5 +1,6 @@
 """天翼云盘 PC 扫码登录。"""
 
+from __future__ import annotations
 import asyncio
 import base64
 import io

@@ -1,5 +1,6 @@
 """123 云盘 Open 响应模型转换。"""
 
+from __future__ import annotations
 from datetime import datetime, timezone
 from typing import Any, Dict, Optional
 

@@ -1,5 +1,6 @@
 """STRM 播放链接签名与路径编码工具。"""
 
+from __future__ import annotations
 import base64
 import hashlib
 import hmac

@@ -1,5 +1,6 @@
 """移动云盘数据模型：将 API 响应转成统一 FileItem。"""
 
+from __future__ import annotations
 from typing import Dict, Any, Optional
 from datetime import datetime, timezone
 from core.base import FileItem

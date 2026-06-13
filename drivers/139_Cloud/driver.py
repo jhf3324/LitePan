@@ -1,5 +1,6 @@
 """移动云盘 (139 Cloud) 驱动：新版个人云 API，token 认证。"""
 
+from __future__ import annotations
 import asyncio
 import base64
 import hashlib

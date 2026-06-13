@@ -1,5 +1,6 @@
 """基于 aiosqlite 的异步数据库访问层。"""
 
+from __future__ import annotations
 import os
 import aiosqlite
 import json

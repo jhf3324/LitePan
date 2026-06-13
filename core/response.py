@@ -1,5 +1,6 @@
 """标准化 API 响应工具。"""
 
+from __future__ import annotations
 from typing import Any, Dict, Optional, Union
 from datetime import datetime
 from .exceptions import LitePanError

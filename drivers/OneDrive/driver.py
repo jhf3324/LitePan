@@ -1,5 +1,6 @@
 """OneDrive 驱动：Microsoft Graph 官方 API 接入。"""
 
+from __future__ import annotations
 import asyncio
 import os
 import tempfile

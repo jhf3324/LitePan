@@ -1,5 +1,6 @@
 """夸克网盘驱动核心业务方法"""
 
+from __future__ import annotations
 import asyncio
 import base64
 import hashlib

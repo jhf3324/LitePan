@@ -1,6 +1,7 @@
 from .config import Pan123OpenConfig
 from .driver import Pan123OpenDriver
 
+from __future__ import annotations
 DRIVER_INFO = {
     "name": "123_open",
     "display_name": "123云盘Open",

@@ -1,5 +1,6 @@
 """天翼云盘驱动：第一阶段支持扫码登录、刷新会话、个人云列表。"""
 
+from __future__ import annotations
 import asyncio
 import base64
 import hashlib

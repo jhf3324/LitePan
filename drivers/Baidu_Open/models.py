@@ -1,5 +1,6 @@
 """百度网盘 Open 驱动数据模型。"""
 
+from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Dict, Any, Optional, List

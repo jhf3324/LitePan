@@ -1,5 +1,6 @@
 """WebDAV 辅助函数：路径解析、PROPFIND 响应、目录 HTML。"""
 
+from __future__ import annotations
 import xml.etree.ElementTree as ET
 from typing import Tuple, Optional, List
 from datetime import datetime, timezone

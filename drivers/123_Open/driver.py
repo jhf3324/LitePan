@@ -1,5 +1,6 @@
 """123 云盘 Open 驱动：官方开放 API 接入。"""
 
+from __future__ import annotations
 import asyncio
 import hashlib
 import os
