@@ -121,7 +121,7 @@ def _normalize_origin(value: str) -> str:
     return text.rstrip("/").lower()
 
 
-def parse_cors_origins(origins_value: str | None) -> list[str]:
+def parse_cors_origins(origins_value: Optional[str]) -> List[str]:
     """解析 LITEPAN_CORS_ORIGINS 白名单，分隔符兼容 , ; 和换行。"""
     raw_value = str(origins_value or "").strip()
     if not raw_value:
@@ -140,7 +140,7 @@ def parse_cors_origins(origins_value: str | None) -> list[str]:
     return result
 
 
-def get_allowed_cors_origins() -> list[str]:
+def get_allowed_cors_origins() -> List[str]:
     configured = parse_cors_origins(os.getenv("LITEPAN_CORS_ORIGINS"))
     if configured:
         return configured
@@ -166,7 +166,7 @@ def get_request_origin(request) -> str:
     return referer
 
 
-def is_request_origin_allowed(request, allowed_origins: list[str] | None = None) -> bool:
+def is_request_origin_allowed(request, allowed_origins: Optional[List[str]] = None) -> bool:
     """基于 Origin/Referer 做的 CSRF 边界：同源直接过，否则要命中白名单。"""
     request_origin = get_request_origin(request)
     if not request_origin:
