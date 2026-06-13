@@ -1,5 +1,6 @@
 """账号认证：刷新、状态持久化、后台定时检查。"""
 
+from __future__ import annotations
 import time
 import asyncio
 from enum import Enum
