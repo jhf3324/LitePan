@@ -1,5 +1,6 @@
 """依赖容器：按需懒加载核心组件，避免模块级循环引用。"""
 
+from __future__ import annotations
 from typing import Optional
 from core.log_manager import get_writer, LogModule
 
