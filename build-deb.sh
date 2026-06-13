@@ -9,16 +9,23 @@ DEB_NAME="litepan_${VERSION}_all.deb"
 mkdir -p "$PKG_DIR/DEBIAN"
 mkdir -p "$PKG_DIR/opt/litepan"
 mkdir -p "$PKG_DIR/lib/systemd/system"
+mkdir -p "$PKG_DIR/opt/litepan/_deps"
 
 # === Copy source code (exclude git stuff) ===
 rsync -a --exclude=.git --exclude=.github --exclude=node_modules --exclude=build-deb.sh "$GITHUB_WORKSPACE/" "$PKG_DIR/opt/litepan/"
 
-# === Pre-compile Python deps for armhf via QEMU ===
-echo "[Build] Pre-compiling Python dependencies for armhf..."
-docker run --rm --platform linux/arm/v7 \
-  -v "$PKG_DIR/opt/litepan:/opt/litepan" \
-  python:3.11-slim \
-  /bin/bash -c 'pip install --upgrade pip -q && pip install --no-cache-dir -r /opt/litepan/requirements.txt --target=/opt/litepan/_deps'
+# === Download ARM wheels on x86_64 (no QEMU!) ===
+echo "[Build] Downloading ARM wheels for armhf..."
+pip3 install --upgrade pip -q
+cd "$PKG_DIR/opt/litepan/_deps"
+# Download all ARM-compatible wheels
+pip3 download --platform linux_armv7l --python-version 3.11 --only-binary=:all: -r ../requirements.txt
+# Extract all wheels
+for w in *.whl; do
+  echo "  Extracting: $w"
+  unzip -qo "$w" && rm -f "$w"
+done
+cd "$OLDPWD"
 
 # === control ===
 cat > "$PKG_DIR/DEBIAN/control" << CONTROLEOF
