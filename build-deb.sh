@@ -11,7 +11,7 @@ mkdir -p "$PKG_DIR/lib/systemd/system"
 
 rsync -a --exclude=.git --exclude=.github --exclude=node_modules --exclude=build-deb.sh "$GITHUB_WORKSPACE/" "$PKG_DIR/opt/litepan/"
 
-cat > "$PKG_DIR/DEBIAN/control" << EOF
+cat > "$PKG_DIR/DEBIAN/control" << CONTROLEOF
 Package: litepan
 Version: ${VERSION}
 Section: net
@@ -21,7 +21,7 @@ Depends: python3, python3-pip
 Maintainer: LitePan Builder <build@litepan.local>
 Description: LitePan - multi-cloud storage management tool
 Homepage: https://github.com/jhf3324/LitePan
-EOF
+CONTROLEOF
 
 cat > "$PKG_DIR/DEBIAN/postinst" << 'POSTINSTEOF'
 #!/bin/bash
