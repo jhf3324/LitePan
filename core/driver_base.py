@@ -1,5 +1,6 @@
 """驱动基类：统一初始化、请求节流；缓存由装饰器处理。"""
 
+from __future__ import annotations
 import asyncio
 import contextvars
 import time
