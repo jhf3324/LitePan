@@ -321,7 +321,6 @@ if __name__ == "__main__":
                 access_log=False,
                 log_level="error",
                 loop="asyncio",
-                timeout_graceful_shutdown=_graceful,
             )
             Server(config=config).run(sockets=[_lsock])
         elif not _web_host_override:
@@ -342,7 +341,6 @@ if __name__ == "__main__":
                     access_log=False,
                     log_level="error",
                     loop="asyncio",
-                    timeout_graceful_shutdown=_graceful,
                 )
             else:
                 print(f"[{current_time}] INFO 系统 | 启动 {APP_NAME} 服务器 ([::]:{_port}，IPv4+IPv6 双栈自动检测)")
@@ -354,7 +352,6 @@ if __name__ == "__main__":
                     access_log=False,
                     log_level="error",
                     loop="asyncio",
-                    timeout_graceful_shutdown=_graceful,
                 )
                 Server(config=config).run(sockets=[_lsock])
         else:
@@ -368,7 +365,6 @@ if __name__ == "__main__":
                 access_log=False,
                 log_level="error",
                 loop="asyncio",
-                timeout_graceful_shutdown=_graceful,
             )
     except KeyboardInterrupt:
         print("\n服务已停止")

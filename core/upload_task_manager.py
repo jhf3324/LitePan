@@ -85,7 +85,7 @@ class UploadTaskManager:
         self._running_count = 0
         self._concurrency_condition = asyncio.Condition()
         self._next_queue_order = 0
-        self._subscribers: Set[asyncio.Queue[str]] = set()
+        self._subscribers: Set[asyncio.Queue] = set()
         self._temp_cleanup_task: Optional[asyncio.Task] = None
 
     def _allocate_queue_order(self) -> int:
@@ -736,15 +736,15 @@ class UploadTaskManager:
             task.updated_at = time.time()
         await self._broadcast_tasks_snapshot()
 
-    async def subscribe_task_stream(self) -> asyncio.Queue[str]:
-        queue: asyncio.Queue[str] = asyncio.Queue(maxsize=1)
+    async def subscribe_task_stream(self) -> asyncio.Queue:
+        queue: asyncio.Queue = asyncio.Queue(maxsize=1)
         async with self._lock:
             self._subscribers.add(queue)
         initial_payload = await self._build_tasks_snapshot_payload()
         queue.put_nowait(initial_payload)
         return queue
 
-    async def unsubscribe_task_stream(self, queue: asyncio.Queue[str]) -> None:
+    async def unsubscribe_task_stream(self, queue: asyncio.Queue) -> None:
         async with self._lock:
             self._subscribers.discard(queue)
 

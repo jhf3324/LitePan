@@ -87,7 +87,7 @@ class RelayTaskManager:
         self._lock = asyncio.Lock()
         self._running_count = 0
         self._condition = asyncio.Condition()
-        self._subscribers: Set[asyncio.Queue[str]] = set()
+        self._subscribers: Set[asyncio.Queue] = set()
 
     async def create_task(self, **kwargs) -> Dict[str, Any]:
         os.makedirs(self._TEMP_DIR, exist_ok=True)
@@ -125,14 +125,14 @@ class RelayTaskManager:
             await self._broadcast()
         return removed
 
-    async def subscribe_task_stream(self) -> asyncio.Queue[str]:
-        queue: asyncio.Queue[str] = asyncio.Queue(maxsize=8)
+    async def subscribe_task_stream(self) -> asyncio.Queue:
+        queue: asyncio.Queue = asyncio.Queue(maxsize=8)
         async with self._lock:
             self._subscribers.add(queue)
         await queue.put(await self._snapshot_payload())
         return queue
 
-    async def unsubscribe_task_stream(self, queue: asyncio.Queue[str]) -> None:
+    async def unsubscribe_task_stream(self, queue: asyncio.Queue) -> None:
         async with self._lock:
             self._subscribers.discard(queue)
 

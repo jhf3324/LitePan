@@ -139,7 +139,6 @@ class EmbyProxyServerManager:
             log_level="warning",
             access_log=False,
             lifespan="off",
-            timeout_graceful_shutdown=3,
         )
         server = uvicorn.Server(uvicorn_config)
         server.install_signal_handlers = lambda: None

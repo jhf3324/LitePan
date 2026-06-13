@@ -5,7 +5,7 @@ pydantic
 python-multipart
 psutil
 aiosqlite
-qrcode[pil]
+qrcode
 guessit
 tmdbsimple
 PySocks
