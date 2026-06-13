@@ -1,5 +1,6 @@
 """全局错误处理器：FastAPI 异常处理器 + 技术错误到中文提示的映射。"""
 
+from __future__ import annotations
 import traceback
 from typing import Dict, Any
 from fastapi import Request, HTTPException
