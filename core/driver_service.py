@@ -1,5 +1,6 @@
 """驱动获取与下载公共服务。"""
 
+from __future__ import annotations
 import json
 import asyncio
 from time import monotonic
