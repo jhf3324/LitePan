@@ -1,3 +1,4 @@
+# LitePan DEB package build workflow
 name: Build LitePan DEB Package
 
 on:
