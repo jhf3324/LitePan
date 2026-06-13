@@ -4,17 +4,15 @@ on:
 jobs:
   build-deb:
     runs-on: ubuntu-latest
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Build DEB
         env:
           RUNNER_TEMP: ${{ runner.temp }}
           GITHUB_WORKSPACE: ${{ github.workspace }}
         run: bash build-deb.sh
       - name: Upload
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: litepan-deb
           path: ${{ runner.temp }}/litepan_*.deb
