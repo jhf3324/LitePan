@@ -202,7 +202,7 @@ class DriverRegistry:
             return None
         return self._drivers[driver_name]["config_class"].get_form_schema()
 
-    def validate_driver_config(self, driver_name: str, config: Dict) -> tuple[bool, List[str]]:
+    def validate_driver_config(self, driver_name: str, config: Dict) -> Tuple[bool, List[str]]:
         if driver_name not in self._drivers:
             return False, [f"未知驱动: {driver_name}"]
 
