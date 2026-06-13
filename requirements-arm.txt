@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+aiohttp
+pydantic
+python-multipart
+aiosqlite
+qrcode
+guessit
+tmdbsimple
+PySocks
+pycryptodome
