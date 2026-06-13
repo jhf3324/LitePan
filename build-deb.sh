@@ -12,29 +12,30 @@ mkdir -p "$PKG_DIR/lib/systemd/system"
 mkdir -p "$PKG_DIR/opt/litepan/_deps"
 
 # === Copy source code (exclude git stuff) ===
-rsync -a --exclude=.git --exclude=.github --exclude=node_modules --exclude=build-deb.sh "$GITHUB_WORKSPACE/" "$PKG_DIR/opt/litepan/"
+rsync -a --exclude=.git --exclude=.github --exclude=node_modules --exclude=build-deb.sh --exclude=requirements-arm.txt "$GITHUB_WORKSPACE/" "$PKG_DIR/opt/litepan/"
 
 # === Download ARM wheels on x86_64 (no QEMU!) ===
 echo "[Build] Downloading ARM wheels for armhf..."
 pip3 install --upgrade pip -q
 cd "$PKG_DIR/opt/litepan/_deps"
-# Download all ARM-compatible wheels
-pip3 download --platform linux_armv7l --python-version 3.11 --only-binary=:all: -r ../requirements.txt
-# Extract all wheels
+# Download ARM wheels (only-binary ensures we only get pre-built ARM wheels)
+pip3 download --platform linux_armv7l --python-version 3.11 --only-binary=:all: -r "$PKG_DIR/opt/litepan/requirements-arm.txt" 2>&1
+# Extract all wheels into _deps
 for w in *.whl; do
+  [ -f "$w" ] || continue
   echo "  Extracting: $w"
   unzip -qo "$w" && rm -f "$w"
 done
 cd "$OLDPWD"
 
-# === control ===
+# === control (with python3-psutil as dep!) ===
 cat > "$PKG_DIR/DEBIAN/control" << CONTROLEOF
 Package: litepan
 Version: ${VERSION}
 Section: net
 Priority: optional
 Architecture: all
-Depends: python3
+Depends: python3, python3-psutil
 Maintainer: LitePan Builder <build@litepan.local>
 Description: LitePan - multi-cloud storage management tool
 Homepage: https://github.com/jhf3324/LitePan
