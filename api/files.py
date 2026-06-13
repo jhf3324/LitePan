@@ -1,3 +1,4 @@
+from __future__ import annotations
 from fastapi import APIRouter, Depends, Form, Body, Request, UploadFile, File
 from fastapi.responses import StreamingResponse, RedirectResponse, JSONResponse, Response
 from typing import List, Optional, Dict, Any
