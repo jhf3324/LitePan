@@ -5,40 +5,59 @@ VERSION="${1:-0.3.1-Beta}"
 PKG_DIR="${RUNNER_TEMP}/litepan"
 DEB_NAME="litepan_${VERSION}_all.deb"
 
+# === Create package structure ===
 mkdir -p "$PKG_DIR/DEBIAN"
 mkdir -p "$PKG_DIR/opt/litepan"
 mkdir -p "$PKG_DIR/lib/systemd/system"
 
+# === Copy source code (exclude git stuff) ===
 rsync -a --exclude=.git --exclude=.github --exclude=node_modules --exclude=build-deb.sh "$GITHUB_WORKSPACE/" "$PKG_DIR/opt/litepan/"
 
+# === Pre-compile Python deps for armhf via QEMU ===
+echo "[Build] Pre-compiling Python dependencies for armhf..."
+docker run --rm --platform linux/arm/v7 \
+  -v "$PKG_DIR/opt/litepan:/opt/litepan" \
+  python:3.11-slim \
+  /bin/bash -c '\
+    pip install --no-cache-dir -r /opt/litepan/requirements.txt --target=/opt/litepan/_deps 2>&1 | tail -3 \
+  '
+
+# === control ===
 cat > "$PKG_DIR/DEBIAN/control" << CONTROLEOF
 Package: litepan
 Version: ${VERSION}
 Section: net
 Priority: optional
 Architecture: all
-Depends: python3, python3-pip
+Depends: python3
 Maintainer: LitePan Builder <build@litepan.local>
 Description: LitePan - multi-cloud storage management tool
 Homepage: https://github.com/jhf3324/LitePan
 CONTROLEOF
 
+# === postinst (no pip needed!) ===
 cat > "$PKG_DIR/DEBIAN/postinst" << 'POSTINSTEOF'
 #!/bin/bash
 set -e
-cd /opt/litepan
-pip3 install --no-cache-dir -r requirements.txt 2>&1 | tail -5
 mkdir -p /opt/litepan/data /opt/litepan/log /opt/litepan/strm
 systemctl daemon-reload
 systemctl enable litepan.service
 systemctl start litepan.service || true
+echo ""
+echo "============================================"
+echo "  LitePan 安装完成!"
+echo "  访问 http://$(hostname -I | awk '{print $1}'):5211"
+echo "  默认账号: admin / admin"
+echo "============================================"
 POSTINSTEOF
 chmod 755 "$PKG_DIR/DEBIAN/postinst"
 
+# === systemd service ===
 cat > "$PKG_DIR/lib/systemd/system/litepan.service" << 'SERVICEEOF'
 [Unit]
 Description=LitePan - Multi-cloud drive aggregation tool
 After=network.target
+
 [Service]
 Type=simple
 User=root
@@ -49,9 +68,13 @@ RestartSec=5
 StandardOutput=journal
 StandardError=journal
 Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONPATH=/opt/litepan/_deps
+
 [Install]
 WantedBy=multi-user.target
 SERVICEEOF
 
+# === Build .deb ===
 dpkg-deb --build "$PKG_DIR" "$PKG_DIR/../$DEB_NAME"
 echo "Built: $PKG_DIR/../$DEB_NAME"
+echo "Size: $(du -sh $PKG_DIR/../$DEB_NAME | cut -f1)"
