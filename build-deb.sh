@@ -18,7 +18,6 @@ rsync -a --exclude=.git --exclude=.github --exclude=node_modules --exclude=build
 echo "[Build] Downloading ARM wheels for armhf..."
 pip3 install --upgrade pip -q
 cd "$PKG_DIR/opt/litepan/_deps"
-# Download ARM wheels from requirements-arm.txt
 pip3 download --platform linux_armv7l --python-version 3.11 --only-binary=:all: -r "$PKG_DIR/opt/litepan/requirements-arm.txt" 2>&1
 # Extract all wheels into _deps
 for w in *.whl; do
@@ -27,23 +26,23 @@ for w in *.whl; do
   unzip -qo "$w" && rm -f "$w"
 done
 cd "$OLDPWD"
-# Remove requirements-arm.txt from final package (not needed on device)
+# Remove requirements-arm.txt from final package
 rm -f "$PKG_DIR/opt/litepan/requirements-arm.txt"
 
-# === control (with python3-psutil as dep!) ===
+# === control (with Debian deps for packages without ARM wheels) ===
 cat > "$PKG_DIR/DEBIAN/control" << CONTROLEOF
 Package: litepan
 Version: ${VERSION}
 Section: net
 Priority: optional
 Architecture: all
-Depends: python3, python3-psutil
+Depends: python3, python3-psutil, python3-pycryptodome
 Maintainer: LitePan Builder <build@litepan.local>
 Description: LitePan - multi-cloud storage management tool
 Homepage: https://github.com/jhf3324/LitePan
 CONTROLEOF
 
-# === postinst (no pip needed!) ===
+# === postinst ===
 cat > "$PKG_DIR/DEBIAN/postinst" << 'POSTINSTEOF'
 #!/bin/bash
 set -e
