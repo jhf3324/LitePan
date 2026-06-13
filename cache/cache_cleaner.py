@@ -1,5 +1,6 @@
 """缓存清理：定时清过期 + 写操作触发的目录/路径/WebDAV 缓存失效。"""
 
+from __future__ import annotations
 import asyncio
 import time
 from datetime import datetime, timedelta
