@@ -6,8 +6,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v4
       - name: Build DEB
         env:
           RUNNER_TEMP: ${{ runner.temp }}
