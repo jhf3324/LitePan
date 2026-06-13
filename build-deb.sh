@@ -18,7 +18,7 @@ echo "[Build] Pre-compiling Python dependencies for armhf..."
 docker run --rm --platform linux/arm/v7 \
   -v "$PKG_DIR/opt/litepan:/opt/litepan" \
   python:3.11-slim \
-  /bin/bash -c 'pip install --no-cache-dir -r /opt/litepan/requirements.txt --target=/opt/litepan/_deps 2>&1 | tail -3'
+  /bin/bash -c 'pip install --no-cache-dir --only-binary=:all: -r /opt/litepan/requirements.txt --target=/opt/litepan/_deps 2>&1 | tail -5'
 
 # === control ===
 cat > "$PKG_DIR/DEBIAN/control" << CONTROLEOF
