@@ -1,5 +1,6 @@
 from typing import Any, Dict, Optional
 
+from __future__ import annotations
 from fastapi import APIRouter, Depends
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
