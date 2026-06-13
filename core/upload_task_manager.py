@@ -8,7 +8,7 @@ import uuid
 from contextlib import asynccontextmanager
 from copy import deepcopy
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Set, Any, Dict, List, Optional
 
 from core.operation_wrapper import current_account_id
 
@@ -639,7 +639,7 @@ class UploadTaskManager:
             )
         return deleted_count
 
-    async def _get_active_temp_paths(self) -> set[str]:
+    async def _get_active_temp_paths(self) -> Set[str]:
         async with self._lock:
             local_paths = [task.local_path for task in self._tasks.values() if task.local_path]
         paths = {self._normalize_temp_path(path) for path in local_paths}
